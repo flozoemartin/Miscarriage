@@ -1,10 +1,14 @@
 ********************************************************************************	
 
-* 
+  * Secondary analyses and absolute risk figure: pattern Cox models, class Cox models, and dose Cox models on the left-hand panel. Absolute risk adjusted for confounders bar chart on the right-hand panel
+
+  * Author: Flo Martin
+
+  * Date: 12/11/2024
 
 ********************************************************************************
 	
-	* Estimates
+* Load in the data and prepare for including in the twoway code
 
 	import delimited using "$Graphdir\results fig data.txt", clear
 	
@@ -66,7 +70,9 @@
 	* Macros to create the null line
 	local t1=13.5
 	local t2=32
-	
+
+* To allow the loops to run
+
 	replace unadj_or=10 if unadj_or==.
 	replace unadj_lci=10 if unadj_lci==.
 	replace unadj_uci=10 if unadj_uci==.
@@ -111,23 +117,25 @@
 	}
 	
 	set scheme tab2
-	
+
+* Twoway code to create the left-hand panel showing the results from the secondary Cox models
+
 	twoway ///
 	(scatteri `t1' 1 `t2' 1, recast(line) yaxis(1) lpatter(dash) lcolor(cranberry)) /// null line
-	(rcap unadj_lci unadj_uci seq if unadj_or!=1, horizontal lcolor(gs12)) /// code for NO 95% CI
-	(scatter seq unadj_or if unadj_or!=1, mcolor(gs12) ms(o) msize(medium) mlcolor(gs12) mlw(thin)) ///
-	(rcap lci uci seq, horizontal lcolor(black)) /// code for NO 95% CI
-	(scatter seq or, mcolor("85 119 135") ms(o) msize(medium) mlcolor(black) mlw(thin)), ///
-	text(12.75 0.4 "{bf:Analytical approach}", size(*0.5) justification(left) placement(e)) text(12.75 0.79 "{bf:Miscarriage / Total}" "{it:n} / N (%)", size(*0.5) justification(left) placement(w)) text(12.75 2.1 "{bf:Unadjusted HR}", size(*0.5) justification(left) placement(e) color(gs10)) text(12.75 2.8 "{bf:Adjusted* HR}", size(*0.5) justification(left) placement(e)) ///
-	text(14 0.4 "{bf:Pattern analysis}", size(*0.5) justification(left) placement(e)) ///
-		text(15 0.4 "Unexposed", size(*0.5) justification(left) placement(e)) ///
-	text(15 0.79 "`total_exp_3'", size(*0.5) justification(right) placement(w)) ///
-	text(15 2.1 "1.00 (reference)", size(*0.5) justification(left) placement(e) color(gs10)) ///
+	(rcap unadj_lci unadj_uci seq if unadj_or!=1, horizontal lcolor(gs12)) /// code for unadjusted 95% CI
+	(scatter seq unadj_or if unadj_or!=1, mcolor(gs12) ms(o) msize(medium) mlcolor(gs12) mlw(thin)) /// unadjusted estimates
+	(rcap lci uci seq, horizontal lcolor(black)) /// code for adjusted 95% CI
+	(scatter seq or, mcolor("85 119 135") ms(o) msize(medium) mlcolor(black) mlw(thin)), /// adjusted estimates
+	text(12.75 0.4 "{bf:Analytical approach}", size(*0.5) justification(left) placement(e)) text(12.75 0.79 "{bf:Miscarriage / Total}" "{it:n} / N (%)", size(*0.5) justification(left) placement(w)) text(12.75 2.1 "{bf:Unadjusted HR}", size(*0.5) justification(left) placement(e) color(gs10)) text(12.75 2.8 "{bf:Adjusted* HR}", size(*0.5) justification(left) placement(e)) /// heading text
+	text(14 0.4 "{bf:Pattern analysis}", size(*0.5) justification(left) placement(e)) /// graph text: analytical approach
+		text(15 0.4 "Unexposed", size(*0.5) justification(left) placement(e)) /// comparator
+	text(15 0.79 "`total_exp_3'", size(*0.5) justification(right) placement(w)) /// n / N comparator
+	text(15 2.1 "1.00 (reference)", size(*0.5) justification(left) placement(e) color(gs10)) /// 
 	text(15 2.8 "1.00 (reference)", size(*0.5) justification(left) placement(e)) ///
-	text(16 0.4 "Prevalent, exposed", size(*0.5) justification(left) placement(e)) ///
-	text(16 0.79 "`total_exp_4'", size(*0.5) justification(right) placement(w)) ///
-	text(16 2.1 "`unadj_or_16_f' (`unadj_lci_16_f' – `unadj_uci_16_f')", size(*0.5) justification(left) placement(e) color(gs10)) ///
-	text(16 2.8 "`or_16_f' (`lci_16_f' – `uci_16_f')", size(*0.5) justification(left) placement(e)) ///
+	text(16 0.4 "Prevalent, exposed", size(*0.5) justification(left) placement(e)) /// prevalent exposure group
+	text(16 0.79 "`total_exp_4'", size(*0.5) justification(right) placement(w)) /// n / N prevalent users
+	text(16 2.1 "`unadj_or_16_f' (`unadj_lci_16_f' – `unadj_uci_16_f')", size(*0.5) justification(left) placement(e) color(gs10)) /// unadjusted estimates
+	text(16 2.8 "`or_16_f' (`lci_16_f' – `uci_16_f')", size(*0.5) justification(left) placement(e)) /// adjusted estimates
 	text(17 0.4 "Incident, exposed", size(*0.5) justification(left) placement(e)) ///
 	text(17 0.79 "`total_exp_5'", size(*0.5) justification(right) placement(w)) ///
 	text(17 2.1 "`unadj_or_17_f' (`unadj_lci_17_f' – `unadj_uci_17_f')", size(*0.5) justification(left) placement(e) color(gs10)) ///
@@ -174,13 +182,15 @@
 	text(31 0.79 "`total_exp_19'", size(*0.5) justification(right) placement(w)) ///
 	text(31 2.1 "`unadj_or_31_f' (`unadj_lci_31_f' – `unadj_uci_31_f')", size(*0.5) justification(left) placement(e) color(gs10)) ///
 	text(31 2.8 "`or_31_f' (`lci_31_f' – `uci_31_f')", size(*0.5) justification(left) placement(e)) ///
-	text(35 0.4 "*Adjusted for maternal age, pregnancy year, practice-level IMD quintile, history of miscarriage, smoking status around the start of pregnancy, parity at the start of" "pregnancy, use of high dose folic acid, antipsychotics, or anti-seizure medication in the 12 months before pregnancy, number of primary care consultations in the" "12 months before pregnancy, and severe mental illness, depression or anxiety ever before the start of pregnancy", size(*0.45) justification(left) placement(e)) ///
-	yscale(range(12 31) noline reverse) ylab("", angle(0) labsize(*0.6) notick nogrid nogextend) ///
-	xscale(range(0.4(0.2)3.6) log titlegap(1)) xlabel(0.8(0.2)2, labsize(vsmall) format(%3.1fc) ) xtitle("{bf}Hazard ratio (95% confidence interval)", size(vsmall)) ///
-	legend(order(3 "Unadjusted" 5 "Adjusted*") pos(5) col(1) region(lcolor(black))) ///
-	yline(12) yline(13.5) yline(18, lcolor(gray) lpattern(dot)) yline(26, lcolor(gray) lpattern(dot)) ///
+	text(35 0.4 "*Adjusted for maternal age, pregnancy year, practice-level IMD quintile, history of miscarriage, smoking status around the start of pregnancy, parity at the start of" "pregnancy, use of high dose folic acid, antipsychotics, or anti-seizure medication in the 12 months before pregnancy, number of primary care consultations in the" "12 months before pregnancy, and severe mental illness, depression or anxiety ever before the start of pregnancy", size(*0.45) justification(left) placement(e)) /// covariates in the models
+	yscale(range(12 31) noline reverse) ylab("", angle(0) labsize(*0.6) notick nogrid nogextend) /// y axis elements
+	xscale(range(0.4(0.2)3.6) log titlegap(1)) xlabel(0.8(0.2)2, labsize(vsmall) format(%3.1fc) ) xtitle("{bf}Hazard ratio (95% confidence interval)", size(vsmall)) /// x axis elements
+	legend(order(3 "Unadjusted" 5 "Adjusted*") pos(5) col(1) region(lcolor(black))) /// legend
+	yline(12) yline(13.5) yline(18, lcolor(gray) lpattern(dot)) yline(26, lcolor(gray) lpattern(dot)) /// distinguishing lines
 	plotregion(margin(0 0 0 0)) name(hr_chunk, replace)
-	
+
+* Load in the data for absolute risk adjusted for confounders
+
 	use "$Graphdir\marginal risk.dta", clear
 	
 	gen row=3 if x=="Unexposed"
@@ -230,14 +240,13 @@
 
 	
 	set scheme tab2
-	
-	
+
 	* Make the bar chart of marginal risk
 	twoway ///
-	(bar risk row, fcolor("85 119 135") lcolor("85 119 135") horiz barwidth(0.75)) ///
-	(rcap lci uci row, horiz lcolor(black)), ///
-	text(12.75 0.25 "{bf}Absolute risk of miscarriage adjusted for confounders*", box bcolor("white") margin(t+1.2 b+1.2) color(black) size(*0.5) justification(left) placement(e)) ///
-	text(15 0.25 "{bf}`risk15_f'%", color(black) size(*0.5) justification(left) placement(e)) text(15 2.2 "(`lci15_f' – `uci15_f'%)", color(black) size(*0.5) justification(left) placement(e)) ///
+	(bar risk row, fcolor("85 119 135") lcolor("85 119 135") horiz barwidth(0.75)) /// bar chart for absolute risk
+	(rcap lci uci row, horiz lcolor(black)), /// 95% CI
+	text(12.75 0.25 "{bf}Absolute risk of miscarriage adjusted for confounders*", box bcolor("white") margin(t+1.2 b+1.2) color(black) size(*0.5) justification(left) placement(e)) /// heading text
+	text(15 0.25 "{bf}`risk15_f'%", color(black) size(*0.5) justification(left) placement(e)) text(15 2.2 "(`lci15_f' – `uci15_f'%)", color(black) size(*0.5) justification(left) placement(e)) /// absolute risk and 95% CI
 	text(16 0.25 "{bf}`risk16_f'%", color(black) size(*0.5) justification(left) placement(e)) text(16 2.2 "(`lci16_f' – `uci16_f'%)", color(black) size(*0.5) justification(left) placement(e)) ///
 	text(17 0.25 "{bf}`risk17_f'%", color(black) size(*0.5) justification(left) placement(e)) text(17 2.2 "(`lci17_f' – `uci17_f'%)", color(black) size(*0.5) justification(left) placement(e)) ///
 	text(20 0.25 "{bf}`risk20_f'%", color(black) size(*0.5) justification(left) placement(e)) text(20 2.2 "(`lci20_f' – `uci20_f'%)", color(black) size(*0.5) justification(left) placement(e)) ///
@@ -250,18 +259,14 @@
 	text(29 0.25 "{bf}`risk29_f'%", color(black) size(*0.5) justification(left) placement(e)) text(29 2.2 "(`lci29_f' – `uci29_f'%)", color(black) size(*0.5) justification(left) placement(e)) ///
 	text(30 0.25 "{bf}`risk30_f'%", color(black) size(*0.5) justification(left) placement(e)) text(30 2.2 "(`lci30_f' – `uci30_f'%)", color(black) size(*0.5) justification(left) placement(e)) ///
 	text(31 0.25 "{bf}`risk31_f'%", color(black) size(*0.5) justification(left) placement(e)) text(31 2.2 "(`lci31_f' – `uci31_f'%)", color(black) size(*0.5) justification(left) placement(e)) ///
-	yline(12) yline(13.5) yline(18, lcolor(gray) lpattern(dot)) yline(26, lcolor(gray) lpattern(dot)) ///
-	legend(label(1 "Adjusted* risk") label(2 "Bootstrapped 95% CI") order(1 2) col(1) pos(6) region(lcolor(black))) ///
-	yscale(range(12 32) titlegap(5) reverse off) ylab(12 "U" 13 "E", labsize(vsmall) nogrid labcolor(white) notick) ytitle("") ///
-	xscale(range(0 18) titlegap(1)) xlab(0(2)18, labsize(vsmall) ) xtitle("{bf}Miscarriage (%)", size(vsmall)) ///
+	yline(12) yline(13.5) yline(18, lcolor(gray) lpattern(dot)) yline(26, lcolor(gray) lpattern(dot)) /// distinguishing lines
+	legend(label(1 "Adjusted* risk") label(2 "Bootstrapped 95% CI") order(1 2) col(1) pos(6) region(lcolor(black))) /// legend
+	yscale(range(12 32) titlegap(5) reverse off) ylab(12 "U" 13 "E", labsize(vsmall) nogrid labcolor(white) notick) ytitle("") /// y axis elements
+	xscale(range(0 18) titlegap(1)) xlab(0(2)18, labsize(vsmall) ) xtitle("{bf}Miscarriage (%)", size(vsmall)) /// x axis elements
 	graphregion(color(white) lcolor(black)) plotregion(margin(0 0 0 0)) name(risk, replace) ///
-	fysize(100) fxsize(40)
-	
-	/*(bar risk row if row==1, horiz fintensity(inten50) barwidth(0.65)) ///
-	text(12.5 0 "{bf}`risk0_f'%", color(black) size(tiny)) text(12 0 "(`lci0_f'-`uci0_f'%)", color(black) size(tiny)) ///
-	text(12.5 1 "{bf}`risk1_f'%", color(black) size(tiny)) text(12 1 "(`lci1_f'-`uci1_f'%)", color(black) size(tiny)) /// */
+	fysize(100) fxsize(40) /// change the size so it isnt equal to the left-hand panel
 	
 	* Combine the graphs to make the primary figure
 	graph combine hr_chunk risk, title("{bf}First trimester antidepressant use and miscarriage:" "adjusted relative and absolute risks from secondary analyses", size(small)) imargin(tiny) name(secondary_fig, replace)
 	
-	graph export "C:\Users\ti19522\OneDrive - University of Bristol\Flo Martin Supervisory Team\Year 4\5_Miscarriage\ch5_secondary_fig.pdf", replace
+	graph export "$Graphdir\secondary_fig.pdf", replace
