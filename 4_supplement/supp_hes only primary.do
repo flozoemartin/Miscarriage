@@ -1,4 +1,3 @@
-
 ********************************************************************************
 
 * Creating supplementary table for miscarriage paper - restricting to those with linked data
@@ -12,6 +11,7 @@
 * Supplementary table of primary analyses restricted to those with linked data created by this script
 
 ********************************************************************************
+
 * Start logging
 
 	log using "$Logdir\4_supplement\supp_hes only primary", name(supp_hes_only_primary) replace
