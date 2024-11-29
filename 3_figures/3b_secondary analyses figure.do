@@ -7,6 +7,16 @@
   * Date: 12/11/2024
 
 ********************************************************************************
+
+* Findings from the secondary analyses.
+
+********************************************************************************
+
+* Start logging 
+
+	log using "$Logdir\3_figures\33b_secondary analyses figure", name(secondary_figure) replace
+
+********************************************************************************
 	
 * Load in the data and prepare for including in the twoway code
 
