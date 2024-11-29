@@ -8,6 +8,16 @@
 
 ********************************************************************************
 
+* Findings from the primary analyses.
+
+********************************************************************************
+
+* Start logging 
+
+	log using "$Logdir\3_figures\3a_primary analyses figure", name(prim_figure) replace
+	
+********************************************************************************
+
 * Load in the data and prepare for use in twoway
 
 	import delimited using "$Graphdir\results fig data.txt", clear
