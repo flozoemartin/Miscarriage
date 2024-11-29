@@ -1,6 +1,6 @@
 ********************************************************************************
 
-* Creating the primary figure 
+* Creating a single figure containing both primary and secondary analyses (for journals with low figure limits)
 
 * Author: Flo Martin 
 
@@ -8,13 +8,13 @@
 
 ********************************************************************************
 
-* Figure 2 - Findings from the primary and secondary analyses.
+* Findings from the primary and secondary analyses.
 
 ********************************************************************************
 
 * Start logging 
 
-	log using "$Logdir\3_figures\3_primary figure", name(primary_figure) replace
+	log using "$Logdir\3_figures\3_primary and secondary single figure", name(prim_sec_figure) replace
 	
 ********************************************************************************
 
