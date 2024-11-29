@@ -1,4 +1,22 @@
+********************************************************************************
 
+* Creating supplementary table for miscarriage paper - investigating the association between missing data in covariates and miscarriage
+
+* Author: Flo Martin 
+
+* Date: 14/06/2024
+
+********************************************************************************
+
+* Supplementary table of regressions assessing the association between missing data in covariates and miscarriage created by this script
+
+********************************************************************************
+
+* Start logging
+
+	log using "$Logdir\4_supplement\supp_missingness regressions", name(supp_missingness_regressions) replace
+	
+********************************************************************************
 
 * Set up the table elements
 	tempname myhandle	
