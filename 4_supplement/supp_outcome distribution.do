@@ -1,6 +1,25 @@
+********************************************************************************
 
+* Supplementary table giving counts of each outcome in the eligible sample
+
+* Author: Flo Martin 
+
+* Date started: 13/06/2024
+
+********************************************************************************
+
+* Supplementary table giving counts of each outcome
+
+********************************************************************************
+
+* Start logging 
+
+	log using "$Logdir\4_supplement\supp_outcome distribution", name(supp_outcome_distribution) replace
+	
+********************************************************************************
 
 * Prepare the table elements
+	
 	tempname myhandle	
 	file open `myhandle' using "$Tabledir\supp_outcome dist.txt", write replace
 	file write `myhandle' "Total (%)" _tab "Exposed (%)" _tab "Unexposed (%)" _n
