@@ -14,7 +14,7 @@
 
 * Start logging 
 
-	log using "$Logdir\3_figures\3a_primary analyses figure", name(prim_figure) replace
+	log using "$Logdir\3_figures\3a_primary analyses figure", name(primary_figure) replace
 	
 ********************************************************************************
 
@@ -215,3 +215,15 @@
 
 	* Export 
 	graph export "$Graphdir\primary_fig.pdf", replace
+
+********************************************************************************	
+	
+* Stop logging
+
+	log close primary_figure
+	
+	translate "$Logdir\3_figures\3a_primary analyses figure.smcl" "$Logdir\3_figures\3a_primary analyses figure.pdf", replace
+	
+	erase "$Logdir\3_figures\3a_primary analyses figure.smcl"
+	
+********************************************************************************
