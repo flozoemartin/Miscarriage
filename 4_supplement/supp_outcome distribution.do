@@ -63,3 +63,15 @@
 		file write `myhandle' %7.0fc (`n') (" (") %4.2fc (`pct') (")") _tab %7.0fc (`n_1') (" (") %4.2fc (`pct_1') (")") _tab %7.0fc (`n_0') (" (") %4.2fc (`pct_0') (")") _n
 		
 	}
+
+********************************************************************************	
+	
+* Stop logging
+		
+	log close supp_outcome_distribution
+	
+	translate "$Logdir\4_supplement\supp_outcome distribution.smcl" "$Logdir\4_supplement\supp_outcome distribution.pdf", replace
+	
+	erase "$Logdir\4_supplement\supp_outcome distribution.smcl"
+
+********************************************************************************
