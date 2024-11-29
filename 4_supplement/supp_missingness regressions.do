@@ -19,10 +19,13 @@
 ********************************************************************************
 
 * Set up the table elements
+	
 	tempname myhandle	
 	file open `myhandle' using "$Tabledir\supp_missingness regressions.txt", write replace
 	file write `myhandle' "Variable" _tab "miscs with missing" _tab "Continuers with missing" _tab "OR (95%CI)" _tab "aOR (95%CI)" _n
-	
+
+* Load in the data
+
 	use "$Datadir\primary_analysis_dataset_updated.dta", clear
 	
 	recode misc .=0 if inlist(outcome, 1,2,3,11,12)
@@ -74,3 +77,15 @@
 		file write `myhandle' _tab %4.2fc (`minadjor') (" (") %4.2fc (`minadjlci') ("-") %4.2fc (`minadjuci') (")") _n
 		
 	}
+
+********************************************************************************
+
+* Stop logging
+		
+	log close supp_missingness_regressions
+	
+	translate "$Logdir\4_supplement\supp_missingness regressions.smcl" "$Logdir\4_supplement\supp_missingness regressions.pdf", replace
+	
+	erase "$Logdir\4_supplement\supp_missingness regressions.smcl"
+
+********************************************************************************
