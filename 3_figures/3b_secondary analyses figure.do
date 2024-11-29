@@ -14,7 +14,7 @@
 
 * Start logging 
 
-	log using "$Logdir\3_figures\33b_secondary analyses figure", name(secondary_figure) replace
+	log using "$Logdir\3_figures\3b_secondary analyses figure", name(secondary_figure) replace
 
 ********************************************************************************
 	
@@ -280,3 +280,15 @@
 	graph combine hr_chunk risk, title("{bf}First trimester antidepressant use and miscarriage:" "adjusted relative and absolute risks from secondary analyses", size(small)) imargin(tiny) name(secondary_fig, replace)
 	
 	graph export "$Graphdir\secondary_fig.pdf", replace
+
+********************************************************************************	
+	
+* Stop logging
+
+	log close secondary_figure
+	
+	translate "$Logdir\3_figures\3b_secondary analyses figure.smcl" "$Logdir\3_figures\3b_secondary analyses figure.pdf", replace
+	
+	erase "$Logdir\3_figures\3b_secondary analyses figure.smcl"
+	
+********************************************************************************
