@@ -2,7 +2,7 @@
 
 First trimester antidepressant use and miscarriage: a comprehensive analysis in the UK Clinical Practice Research Datalink
 
-Population derivation for this project can be found at https://github.com/flozoemartin/CPRD/
+Population derivation for this project can be found at https://github.com/flozoemartin/Population-derivation
 
 Codelists for this project can be found at https://github.com/flozoemartin/codelists/
 
